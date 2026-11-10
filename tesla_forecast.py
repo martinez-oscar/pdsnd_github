@@ -13,6 +13,7 @@ Usage:
     python tesla_forecast.py --csv tsla.csv        # use a CSV with Date,Close
     python tesla_forecast.py --years 5 --sims 20000 --plot
     python tesla_forecast.py --demo                # synthetic data (offline test)
+    python tesla_forecast.py --backtest --years 10 # check how reliable it was
 """
 import argparse
 
@@ -61,6 +62,45 @@ def simulate(prices, n_sims, max_days, seed=42):
     return paths, mu, sigma
 
 
+Z90 = 1.6448536269514722  # z-score for the 5th / 95th percentile
+
+
+def backtest(prices, window=504, step=21):
+    """Walk-forward test of the forecast on past data.
+
+    At each origin date, estimate drift/volatility from the previous `window`
+    trading days only (no look-ahead), build the closed-form GBM 90% interval
+    for each horizon, and compare it with the price that actually occurred.
+    Origins are `step` days apart, so results overlap and are correlated:
+    treat them as a rough guide, not a precise statistic.
+    """
+    log_p = np.log(prices.to_numpy())
+    rets = np.diff(log_p)
+    print(f"\nBacktest (estimation window {window} days, origin every {step} days)")
+    print(f"{'Horizon':<11}{'Tests':>7}{'In 90% range':>14}{'Median |err|':>14}"
+          f"{'Within 10%':>12}")
+    for name, h in HORIZONS.items():
+        hits, errs, tests = 0, [], 0
+        for t in range(window, len(prices) - h, step):
+            r = rets[t - window:t]
+            mu, sigma = r.mean(), r.std(ddof=1)
+            centre = h * mu
+            spread = Z90 * sigma * np.sqrt(h)
+            actual = log_p[t + h] - log_p[t]            # realised log return
+            hits += centre - spread <= actual <= centre + spread
+            errs.append(abs(np.exp(actual - centre) - 1))  # |actual/median - 1|
+            tests += 1
+        if tests == 0:
+            print(f"{name:<11}{'not enough history (use more --years)':>46}")
+            continue
+        errs = np.array(errs)
+        print(f"{name:<11}{tests:>7}{hits / tests:>14.0%}{np.median(errs):>14.0%}"
+              f"{(errs <= 0.10).mean():>12.0%}")
+    print("'In 90% range' should be near 90% if the interval is well calibrated.\n"
+          "'Within 10%' = how often the median forecast was within 10% of the "
+          "actual price.")
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -68,6 +108,8 @@ def main():
     p.add_argument("--years", type=int, default=5, help="years of history (default 5)")
     p.add_argument("--sims", type=int, default=10000, help="Monte Carlo paths")
     p.add_argument("--plot", action="store_true", help="save forecast.png")
+    p.add_argument("--backtest", action="store_true",
+                   help="walk-forward test of past forecast accuracy")
     p.add_argument("--demo", action="store_true", help="use synthetic data")
     args = p.parse_args()
 
@@ -91,6 +133,9 @@ def main():
               f"{med / last - 1:>11.1%}")
     print("\nThe 5th-95th range covers 90% of simulated outcomes. "
           "Not financial advice.")
+
+    if args.backtest:
+        backtest(prices)
 
     if args.plot:
         try:
