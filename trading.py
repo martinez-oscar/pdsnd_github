@@ -39,6 +39,7 @@ import os
 import numpy as np
 import pandas as pd
 
+import news
 import stock_strategies as ss
 from stock_strategies import Signal, TD, _vol
 
@@ -140,7 +141,7 @@ PRICE_LAYERS = [_by_name("HistoricalDrift"), _by_name("TechnicalML"),
                 TrendFollowing(), MeanReversion(), VolatilityRegime(),
                 MarketRegime()]
 ALL_LAYERS = [_by_name("HistoricalDrift"), _by_name("Fundamentals"),
-              _by_name("TechnicalML"), _by_name("NewsSentiment"),
+              _by_name("TechnicalML"), news.NewsLayer(),
               _by_name("Earnings"), TrendFollowing(), MeanReversion(),
               VolatilityRegime(), MarketRegime()]
 

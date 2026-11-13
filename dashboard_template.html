@@ -102,6 +102,21 @@ td.heat { min-width: 62px; border-left: 2px solid var(--surface);
   color: var(--ink2); margin-top: 8px; flex-wrap: wrap; }
 .key .bar { width: 120px; height: 8px; border-radius: 4px;
   background: linear-gradient(90deg, var(--neg), var(--mid), var(--pos)); }
+.dbar { display: inline-block; position: relative; width: 110px; height: 10px;
+  vertical-align: middle; margin-right: 8px; }
+.dbar::before { content: ""; position: absolute; left: 50%; top: -3px;
+  bottom: -3px; width: 1px; background: var(--axis); }
+.dbar i { position: absolute; top: 1px; height: 8px; }
+.dbar i.p { left: 50%; background: var(--pos); border-radius: 0 4px 4px 0; }
+.dbar i.n { right: 50%; background: var(--neg); border-radius: 4px 0 0 4px; }
+td.head { white-space: normal; min-width: 260px; max-width: 520px; text-align: left; }
+td.head a { color: inherit; text-decoration: underline;
+  text-decoration-color: var(--axis); text-underline-offset: 2px; }
+.tag { display: inline-block; padding: 0 7px; border-radius: 999px;
+  border: 1px solid var(--border); font-size: 12px; color: var(--ink2); }
+.ev { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  margin: 0 0 12px; font-size: 13px; color: var(--ink2); }
+.ev b { color: var(--ink); }
 ul.caveats { margin: 6px 0 0; padding-left: 18px; color: var(--ink2);
   font-size: 13px; }
 ul.caveats li { margin-bottom: 4px; }
@@ -278,6 +293,42 @@ if (P) {
     ${P.signals.map(s => `<tr class="${s.enter ? "hl" : ""}"><td>${esc(s.ticker)}</td><td>${usd(s.last, 2)}</td><td>${pct(s.p_up, 0)}</td><td>${pct(s.agree, 0)}</td><td>${s.trend ? "▲ up" : "▽ not up"}</td><td>${usd(s.lo, 0)} – ${usd(s.hi, 0)}</td>
       <td class="l">${held.has(s.ticker) ? (s.exit ? "Held · exit signal" : "Held") : s.enter ? "✓ Buy candidate" : "–"}</td>${layers.map(n => heat(s.layers[n])).join("")}</tr>`).join("")}</table></div>
     <div class="key"><span>Layer cells: each layer’s push on the expected return</span><span>bearish</span><span class="bar"></span><span>bullish</span></div></div>`));
+
+  /* ---------------- News ---------------- */
+  if (P.news) {
+    const N = P.news, ev = N.evidence;
+    const push = Object.fromEntries(P.signals.map(s => [s.ticker, s.layers.NewsSentiment]));
+    const rows = Object.entries(N.signals).map(([tk, v]) => ({tk, ...v})).sort((a, b) => (b.z ?? -9) - (a.z ?? -9));
+    const bar = (z) => { if (z == null) return `<span class="dbar"></span>–`;
+      const w = Math.min(50, Math.abs(z) / 2.5 * 50);
+      return `<span class="dbar"><i class="${z >= 0 ? "p" : "n"}" style="width:${w}%"></i></span>${z > 0 ? "+" : z < 0 ? "−" : ""}${Math.abs(z).toFixed(1)}`; };
+    const h5 = ev.horizons["5"];
+    const evText = ev.status === "measured"
+      ? `<b>Measured.</b> Over ${h5.days} days of archived news, the 5-day rank correlation between this score and what stocks did next was ${num(h5.ic, 3)} (t = ${num(h5.t, 1)}; above about 2 is notable). The system sizes the news push with ${num(ev.ic_used, 3)}, which is that measurement pulled toward a cautious prior of ${ev.prior}. A score that doesn’t work measures near zero and switches itself off.`
+      : `<b>Still collecting evidence.</b> ${ev.days} of ${ev.need_days} days needed before the signal can be judged. Until then the news push is sized with a cautious assumed skill of ${ev.prior}, which keeps it small. Run the daily cycle to grow the archive.`;
+    const srcLine = N.sources ? `<p class="sub" style="margin-top:10px">Feeds this run: ${Object.entries(N.sources).map(([n, v]) => `${esc(n)} ${v.fail && !v.ok ? "✕ failed" : "✓"} (${v.items} items)`).join(" · ")}</p>` : "";
+    app.append($(`<div class="card"><h2>News scanner</h2>
+      <p class="sub">${ev.stories.toLocaleString()} stories archived since ${ev.first_day ?? "today"}, ${ev.added} new this run. Tone is scored per headline by event type, with duplicates merged and opinion pieces, price recaps and law-firm notices discounted.</p>
+      <div class="ev">${evText}</div>
+      <div class="scroll"><table><tr><th>Stock</th><th class="l">News tone vs the other stocks</th><th>Raw tone</th><th>Stories, 7 days</th><th>Attention vs normal</th><th>Price, 5 days</th><th>Push on forecast</th><th class="l">Main event types</th></tr>
+      ${rows.map(r => `<tr><td>${esc(r.tk)}</td><td class="l">${bar(r.z)}</td><td>${r.stories_7d ? (r.level > 0 ? "+" : r.level < 0 ? "−" : "") + Math.abs(r.level).toFixed(2) : "–"}</td><td>${r.stories_7d}</td><td>${r.attention ? r.attention.toFixed(1) + "×" : "–"}</td><td class="${cls(r.ret_5d)}">${spct(r.ret_5d)}</td><td>${push[r.tk] != null ? spct(push[r.tk], 2) : "–"}</td><td class="l">${r.events.length ? r.events.map(e => `<span class="tag">${esc(e)}</span>`).join(" ") : "–"}</td></tr>`).join("")}</table></div>
+      ${srcLine}</div>`));
+
+    const st = N.stories.slice(0, 20);
+    app.append($(`<div class="card"><h2>Stories that moved the scores</h2>
+      <p class="sub">Last 7 days, ranked by tone × weight × recency. Weight combines event type, source and how specific the story is to the company.</p>
+      ${st.length ? `<div class="scroll"><table><tr><th>Stock</th><th class="l">Headline</th><th class="l">Source</th><th class="l">Type</th><th>Tone</th><th>Weight</th><th>Published</th></tr>
+      ${st.map(x => `<tr><td>${esc(x.ticker)}</td><td class="head">${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>` : esc(x.title)}${x.copies > 1 ? ` <span class="tag">×${x.copies}</span>` : ""}</td><td class="l">${esc(x.source || "–")}</td><td class="l"><span class="tag">${esc(x.etype)}</span></td><td>${x.s > 0.05 ? "▲ +" : x.s < -0.05 ? "▼ −" : ""}${Math.abs(x.s).toFixed(2)}</td><td>${x.w.toFixed(2)}</td><td>${esc(x.published.slice(0, 10))}</td></tr>`).join("")}</table></div>`
+      : `<div class="empty">No scored stories in the last 7 days.</div>`}</div>`));
+
+    const hz = Object.entries(ev.horizons);
+    if (hz.length || ev.by_event.length) app.append($(`<div class="card"><h2>Has the news signal worked?</h2>
+      <p class="sub">Measured on the archive only, using each story from the first close after it was published. Rank correlation near 0 means no relationship; t above about 2 is notable. The news-type table has many rows, so expect one or two to reach t = 2 by chance alone.</p>
+      <div class="row two"><div class="scroll"><table><tr><th>Days ahead</th><th>Rank correlation</th><th>t</th><th>Days measured</th></tr>
+      ${hz.map(([h, r]) => `<tr><td>${h}</td><td>${num(r.ic, 3)}</td><td>${num(r.t, 1)}</td><td>${r.days}</td></tr>`).join("")}</table></div>
+      <div class="scroll">${ev.by_event.length ? `<table><tr><th>News type</th><th class="l">Tone</th><th>Stories</th><th>Next 5 days vs peers</th><th>t</th></tr>
+      ${ev.by_event.slice(0, 10).map(r => `<tr><td>${esc(r.etype)}</td><td class="l">${r.sign === "good" ? "▲ good" : "▼ bad"}</td><td>${r.n}</td><td class="${cls(r.mean)}">${spct(r.mean, 2)}</td><td>${num(r.t, 1)}</td></tr>`).join("")}</table>` : ""}</div></div></div>`));
+  }
 
   const tr = E.trades.slice().reverse().slice(0, 25);
   const wins = E.trades.filter(t => t.ret > 0).length;

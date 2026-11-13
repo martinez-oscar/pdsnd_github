@@ -8,8 +8,9 @@ What it does
   backtest   Walk-forward portfolio test on past prices (price-only layers, no
              look-ahead): the chosen rule vs. the other rules, vs. equal-weight
              buy-and-hold, vs. SPY, and vs. a "shifted-signal" skill test.
-  run        Daily cycle for the paper account: fetch data, score every stock
-             with ALL layers, apply exits / risk rules / entries, save state.
+  run        Daily cycle for the paper account: fetch data, scan and archive
+             news, score every stock with ALL layers, apply exits / risk rules
+             / entries, save state.
   dashboard  Build a self-contained dashboard.html from the saved state.
   all        backtest + run + dashboard.
 
@@ -47,6 +48,7 @@ import types
 import numpy as np
 import pandas as pd
 
+import news
 import stock_strategies as ss
 import trading as tr
 from scan import DEFAULT_TICKERS
@@ -422,6 +424,9 @@ def cycle(bundles, cfg, a, sdir):
     else:
         eng = Engine(cfg, state["engine"])
 
+    nres = news.scan_universe(list(bundles), sdir, px, demo=a.demo)
+    for tk, b in bundles.items():
+        b.news = nres["signals"].get(tk)
     sig, rows = todays_signals(bundles, cfg)
     if state.get("last_date") == today and not a.force:
         print(f"Already ran for {today}; refreshing signals only "
@@ -434,7 +439,7 @@ def cycle(bundles, cfg, a, sdir):
     base = px.reindex(hd, method="ffill")
     bench = (base / base.iloc[0]).mean(axis=1) * eng.hist[0][1]
     state.update(engine=eng.state(), last_date=today, orders_today=orders,
-                 signals=rows, cfg=cfg, tickers=list(bundles),
+                 signals=rows, cfg=cfg, tickers=list(bundles), news=nres,
                  bench=[round(float(v), 2) for v in bench],
                  mode="demo" if a.demo else "paper")
     with open(path, "w") as f:
@@ -449,6 +454,7 @@ def cycle(bundles, cfg, a, sdir):
               f"${o['price']:,.2f}  (${o['value']:,.0f}, {o['why']})")
     if not orders:
         print("  No orders today.")
+    news.print_report(nres)
 
 
 # --------------------------------------------------------------------------
