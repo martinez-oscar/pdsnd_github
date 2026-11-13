@@ -87,6 +87,9 @@ FALSE_FRIENDS = {
     "V": r"\b(h-?1b|travel|immigration|student|tourist|work|golden) visas?\b|"
          r"\bvisas? (rules?|ban|policy|waiver|applicants?|fees?|program)\b",
     "META": r"\bmeta[- ](analysis|data)\b",
+    "ORCL": r"\boracle financial services\b|\boracle of omaha\b",
+    "AAPL": r"\bbig apple\b|\bapple (pie|cider|orchard|harvest)\b",
+    "AMZN": r"\bamazon (rainforest|river|basin|deforestation)\b",
 }
 SOURCE_TIER = [
     (1.0, ["reuters", "bloomberg", "wall street journal", "wsj", "associated"
@@ -112,8 +115,8 @@ EVENT_LABEL = {"guidance": "Guidance", "earnings": "Earnings", "mna": "M&A",
                "recap": "Price recap", "opinion": "Opinion",
                "lawfirm": "Law-firm notice"}
 
-_UP = r"(?:raises?|raised|lifts?|lifted|boosts?|boosted|hikes?|hiked|increases?|increased|ups)"
-_DN = r"(?:cuts?|lowers?|lowered|slash(?:es|ed)?|trims?|trimmed|reduces?|reduced)"
+_UP = r"\b(?:raises?|raised|lifts?|lifted|boosts?|boosted|hikes?|hiked|increases?|increased|ups)"
+_DN = r"\b(?:cuts?|lowers?|lowered|slash(?:es|ed)?|trims?|trimmed|reduces?|reduced)"
 _EST = r"(?:estimates?|expectations?|forecasts?|views?|consensus|street|targets?)"
 _FIN = r"(?:earnings|profits?|revenues?|sales|eps|margins?|deliveries|bookings)"
 # (event type, polarity, regex). Order = priority for the event label.
@@ -122,13 +125,17 @@ PATTERNS = [(t, p, re.compile(rx, re.I)) for t, p, rx in [
                    r"class action (?:reminder|deadline|filed|notice)|lead plaintiff|"
                    r"law (?:firm|offices?)|on behalf of (?:investors|shareholders)|"
                    r"rosen law|pomerantz|levi & korsinsky|bragar eagel|faruqi|"
-                   r"glancy prongay|robbins geller|bernstein liebhard|encourages .{0,40}investors"),
+                   r"glancy prongay|robbins geller|bernstein liebhard|kaplan fox|encourages .{0,40}investors|"
+                   r"alerts? (?:investors|shareholders)|upcoming deadline|investors? (?:who|with) (?:lost|losses)|"
+                   r"securities (?:fraud )?class action"),
     ("opinion", 0, r"^\d+ (?:top |best |magnificent |unstoppable |no-brainer )?(?:\w+ )?(?:stocks?|reasons?|things)|"
                    r"stocks? to (?:buy|watch|sell|avoid|own)|should you (?:buy|sell|invest)|"
                    r"is it (?:too late|time)|better buy|\bvs\.? |\bprediction\b|"
                    r"could (?:make|be worth|soar|double)|millionaire|"
                    r"what to (?:know|watch|expect)|\bif you(?:'d| had)? invested\b|"
-                   r"here'?s (?:what|how)|\?\s*$"),
+                   r"here'?s (?:what|how|the)|\?|\b(?:still |now )?a (?:strong |top )?(?:buy|sell|hold)\b|"
+                   r"buy the dip|time to (?:buy|sell)|\blatest:|& more\b|live updates|takeaways|"
+                   r"everything (?:you need )?to know|\bpreview\b|\bexplained\b|what we know"),
     ("recap", 0, r"(?:stock|shares?) .{0,25}(?:jump|surg|soar|rise|rose|climb|rall|gain|"
                  r"pop|fall|fell|drop|plung|sink|sank|slid|slip|tumbl|slump|dip|crash)|"
                  r"why .{0,40}(?:stock|shares)|(?:stock|shares) (?:is|are) (?:up|down|moving)|"
@@ -140,15 +147,15 @@ PATTERNS = [(t, p, re.compile(rx, re.I)) for t, p, rx in [
     ("guidance", -1.5, r"(?:" + _DN + r"|withdraws?|suspends?|pulls?) (?:its |the |full[- ]year |annual |fy\d* |\w+ )?"
                        r"(?:guidance|outlook|forecasts?)|guides? (?:below|lower)|profit warning|"
                        r"warns? (?:on|of|about) .{0,20}(?:profits?|revenues?|sales|earnings|demand|margins?)|"
-                       r"(?:weak|soft|disappointing|downbeat) (?:guidance|outlook|forecast)"),
+                       r"\b(?:weak|soft|disappointing|downbeat) (?:guidance|outlook|forecast)"),
     ("earnings", +1.3, r"(?:beats?|tops?|topped|exceeds?|exceeded|crush(?:es|ed)?|smash(?:es|ed)?|surpass(?:es|ed)?) "
                        r".{0,40}" + _EST + r"|" + _FIN + r" (?:beats?|jumps?|surges?|soars?|rises?|climbs?|grows?|doubles?)|"
                        r"record (?:quarter|quarterly )?" + _FIN + r"|record quarter|"
-                       r"(?:strong|blowout|stellar) (?:quarter|results|earnings)|swings? to (?:a )?profit"),
+                       r"\b(?:strong|blowout|stellar) (?:quarter|results|earnings)|swings? to (?:a )?profit"),
     ("earnings", -1.3, r"(?:miss(?:es|ed)?|falls? short of|fell short of|trails?|lags?) .{0,40}" + _EST + r"|"
                        + _FIN + r" (?:miss(?:es)?|falls?|drops?|declines?|plunges?|slumps?|shrinks?|slides?)|"
                        r"(?:posts?|reports?|swings? to) (?:a |an )?(?:\w+ )?loss|"
-                       r"(?:weak|disappointing|dismal) (?:quarter|results|earnings)"),
+                       r"\b(?:weak|disappointing|dismal) (?:quarter|results|earnings)"),
     ("analyst", +1.0, r"upgrad(?:e|es|ed)\b|" + _UP + r" .{0,30}price target|price target .{0,20}(?:raised|lifted|hiked|boosted|increased)|"
                       r"initiat\w+ .{0,40}(?:buy|overweight|outperform)|"
                       r"(?:reiterat|maintain)\w+ .{0,25}(?:buy|overweight|outperform)|top pick"),
@@ -162,7 +169,9 @@ PATTERNS = [(t, p, re.compile(rx, re.I)) for t, p, rx in [
                          r"export (?:ban|curbs?|restrictions?|controls?)|new tariffs?|hit (?:by|with) tariffs?"),
     ("legal", +0.8, r"(?:wins?|won) .{0,25}(?:lawsuit|case|appeal|trial|ruling)|lawsuit (?:dismissed|tossed)|"
                     r"(?:cleared|acquitted) (?:of|in)"),
-    ("legal", -1.0, r"\b(?:sued|indict\w*|fraud|subpoena\w*|whistleblower)\b|class[- ]action|"
+    ("legal", -1.0, r"\b(?:sued|indict\w*|subpoena\w*|whistleblower)\b|class[- ]action|"
+                    r"(?:accused of|alleged|charged with|securities|accounting) fraud|"
+                    r"fraud (?:charges?|case|probe|allegations?|lawsuit|trial|claims?)|"
                     r"(?:faces?|hit with|slapped with) .{0,25}(?:lawsuit|suit|fine|penalty|probe|investigation)|"
                     r"(?:fined|to pay) .{0,20}(?:\$|€|£)|(?:loses?|lost) .{0,25}(?:lawsuit|case|appeal|trial)|"
                     r"under investigation|accounting (?:probe|irregularit)"),
@@ -213,21 +222,52 @@ STOP = set("a an the of to in on for and or at by with from as is are be its "
 # --------------------------------------------------------------------------
 # Scoring one headline
 # --------------------------------------------------------------------------
+BROKERS = {"JPM"}          # companies whose analysts rate OTHER stocks
+_MODIFIER = re.compile(r"^(?:'s|’s)?[- ]?(?:suppliers?|rivals?|partners?|competitors?|"
+                       r"customers?|backed|veterans?|alum\w*|challengers?|killers?)\b", re.I)
+_ANALYST_ACT = re.compile(r"^(?:\s+\w+)?\s+(?:analysts?|strategists?|upgrad\w+|downgrad\w+|"
+                          r"initiat\w+|reiterat\w+|raises|lifts|cuts|lowers|slashes|"
+                          r"sees?|says|expects|predicts|names|picks|stays)\b", re.I)
+_LEAD_STOCK = re.compile(r"^([A-Z][\w&.'-]*(?: [A-Z][\w&.'-]*){0,3}) (?:Stock|Shares)\b")
+
+
+def _find(title, tk, universe):
+    """First mention of a company (by name or ticker) in the title."""
+    for name in universe.get(tk, []):
+        m = re.search(r"\b" + re.escape(name) + r"\b", title, re.I)
+        if m:
+            return m
+    if len(tk) >= 3:
+        return re.search(r"(?<![A-Za-z])" + re.escape(tk) + r"(?![A-Za-z])", title)
+    return re.search(r"[($:]\s?" + re.escape(tk) + r"\b", title)
+
+
 def _mentions(title, ticker, universe):
-    """Does the title name this company? How many OTHER universe companies?"""
-    def hit(tk):
-        for name in universe.get(tk, []):
-            if re.search(r"\b" + re.escape(name) + r"\b", title, re.I):
-                return True
-        if len(tk) >= 3:
-            return re.search(r"(?<![A-Za-z])" + re.escape(tk) + r"(?![A-Za-z])",
-                             title) is not None
-        return re.search(r"[($:]\s?" + re.escape(tk) + r"\b", title) is not None
-    me = hit(ticker)
+    """-> (role in [0,1] or None if not named, other companies named).
+    role < 1 when the company is named but is not what the story is about:
+    'Apple supplier Foxconn ...', 'JPMorgan upgrades X', 'X Stock: ... Microsoft'."""
+    others = sum(_find(title, o, universe) is not None
+                 for o in universe if o != ticker)
+    m = _find(title, ticker, universe)
+    if m is None:
+        return None, others
     ff = FALSE_FRIENDS.get(ticker)
-    if me and ff and re.search(ff, title, re.I):
-        return False, 0, True
-    return me, sum(hit(o) for o in universe if o != ticker), False
+    if ff and re.search(ff, title, re.I):
+        return 0.0, others
+    after = title[m.end(): m.end() + 40]
+    role = 1.0
+    if _MODIFIER.match(after):
+        role = 0.3
+    elif ticker in BROKERS and (_ANALYST_ACT.match(after) or re.search(
+            r",\s*" + re.escape(m.group(0)) + r"\b.{0,25}\b(?:see|say|expect)", title)):
+        role = 0.1
+    else:
+        lead = _LEAD_STOCK.match(title)
+        if lead and m.start() >= lead.end():
+            role = 0.3                 # "<Other Co> Stock: ... <our company>"
+        elif m.start() > 0.6 * len(title):
+            role = 0.6                 # named only at the tail
+    return role, others
 
 
 def source_tier(source):
@@ -241,6 +281,8 @@ def source_tier(source):
 def score_headline(title, ticker="", source="", universe=None):
     """-> dict(s in [-1,1], etype, w weight, rel, hits)."""
     universe = COMPANY if universe is None else universe
+    title = re.sub(r"\bOutlook\b(?=,| and | email| app| outage| down| users)|"
+                   r"(?<=Microsoft )Outlook", "EmailApp", title)
     etype, raw, hits = None, 0.0, []
     for t, pol, rx in PATTERNS:
         m = rx.search(title)
@@ -267,10 +309,9 @@ def score_headline(title, ticker="", source="", universe=None):
     s = raw / (abs(raw) + 1.5)
     hedge = 0.6 if HEDGE.search(title) else 1.0
     if ticker:
-        me, others, false_friend = _mentions(title, ticker, universe)
-        rel = (0.0 if false_friend else
-               (1.0 if others == 0 else 0.7 if others == 1 else 0.35) if me
-               else 0.25)
+        role, others = _mentions(title, ticker, universe)
+        rel = 0.25 if role is None else \
+            role * (1.0 if others == 0 else 0.7 if others == 1 else 0.35)
     else:
         rel = 1.0
     w = IMPORTANCE[etype] * source_tier(source) * rel * hedge
@@ -792,6 +833,12 @@ CASES = [  # (headline, ticker, expected sign, expected event type)
     ("SHAREHOLDER ALERT: Rosen Law Firm reminds Tesla investors of class action deadline", "TSLA", 0, "lawfirm"),
     ("Microsoft to acquire gaming studio", "MSFT", 0, "mna"),
     ("Visa reports quarterly results", "V", 0, "earnings"),
+    ("Is Microsoft Outlook Down? Problems Continue Hours After Widespread Impact", "MSFT", 0, "opinion"),
+    ("Microsoft Outlook, Teams hit by outage", "MSFT", -1, "operations"),
+    ("Nvidia Stock Is Still a Buy After CEO Jensen Huang's Departure", "NVDA", 0, "opinion"),
+    ("Kaplan Fox Alerts Investors to an Upcoming Deadline in the Alphabet Inc. Class Action", "GOOGL", 0, "lawfirm"),
+    ("Visa Ties Stablecoin Settlement Move To New Fraud API Rollout", "V", 0, "other"),
+    ("Groups urge Amazon to change warehouse policy", "AMZN", 0, "other"),
 ]
 
 
@@ -815,6 +862,15 @@ def selftest():
         ("price recap weighs far less than earnings",
          score_headline(CASES[16][0], "TSLA")["w"] <
          0.3 * score_headline(CASES[0][0], "TSLA", "Reuters")["w"]),
+        ("'Apple supplier Foxconn' is mostly not about Apple",
+         score_headline("Apple supplier Foxconn posts record profit, raises outlook", "AAPL")["rel"] <= 0.3),
+        ("JPMorgan as the analyst is not JPMorgan news",
+         score_headline("JPMorgan downgrades Innoviz stock rating on auto delays", "JPM")["rel"] <= 0.1
+         and score_headline("Nomura, Jefferies, JPMorgan see upside in Hitachi Energy", "JPM")["rel"] <= 0.1),
+        ("an upgrade OF JPMorgan still counts",
+         score_headline("Wells Fargo upgrades JPMorgan to overweight", "JPM")["rel"] >= 0.6),
+        ("another company's earnings are not Microsoft's",
+         score_headline("Cerebras Stock: Earnings Beat and New Microsoft Partnership", "MSFT")["rel"] <= 0.3),
         ("hedged headline is dampened",
          score_headline("Tesla may cut annual outlook", "TSLA")["w"] <
          score_headline("Tesla cuts annual outlook", "TSLA")["w"]),
