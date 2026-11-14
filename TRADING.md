@@ -1,4 +1,8 @@
-# Paper trading system
+# Paper trading system (retired 2026-11-14)
+
+**Retired.** This system is no longer developed or run. The thesis monitor and the hidden-bet analysis
+moved to the private trading-bot project; nothing else was carried over. The code and the paper
+account below are kept as a record only.
 
 Research code. **No real money, no broker connection.** Not financial advice.
 
