@@ -1,0 +1,457 @@
+{
+ "as_of": "2026-11-13",
+ "days": 252,
+ "start": "2025-11-13",
+ "missing": [],
+ "factors": [
+  {
+   "name": "Market",
+   "etf": "RSP",
+   "base": null,
+   "what": "the average US large company (S&P 500, equal weight)"
+  },
+  {
+   "name": "Big tech",
+   "etf": "QQQ",
+   "base": "RSP",
+   "what": "the tech giants vs the average company"
+  },
+  {
+   "name": "AI chips",
+   "etf": "SMH",
+   "base": "QQQ",
+   "what": "chip makers vs the rest of big tech"
+  },
+  {
+   "name": "Consumer spending",
+   "etf": "XLY",
+   "base": "RSP",
+   "what": "consumer discretionary vs the average company"
+  },
+  {
+   "name": "Interest rates",
+   "etf": "TLT",
+   "base": null,
+   "what": "long Treasury bonds (up when yields fall)"
+  }
+ ],
+ "group_corr": 0.3,
+ "views": [
+  {
+   "label": "Paper account, open positions",
+   "n": 8,
+   "vol": 0.16737654851624367,
+   "betas": {
+    "Market": 0.7855133655854855,
+    "Big tech": 0.3731726077040486,
+    "AI chips": -0.3686737598855146,
+    "Consumer spending": 0.2189779289909354,
+    "Interest rates": -0.053090109555455296
+   },
+   "share": {
+    "Market": 0.3262526657694404,
+    "Big tech": 0.1550728547924387,
+    "AI chips": 0.1383947541532902,
+    "Consumer spending": 0.02108409207232723,
+    "Interest rates": 0.0007526320651365768
+   },
+   "explained": 0.6415569988526331,
+   "own": 0.35844300114736694,
+   "top_factor": "Market",
+   "eff_bets": 2.5683691154123682,
+   "avg_corr": 0.12007140530738045,
+   "groups": [
+    {
+     "members": [
+      "MSFT",
+      "ORCL"
+     ],
+     "avg_corr": 0.30748505996469283
+    }
+   ],
+   "stocks": [
+    {
+     "ticker": "MSFT",
+     "weight": 0.14996180098055542,
+     "risk": 0.19194812180721094,
+     "vol": 0.33946101757570235,
+     "betas": {
+      "Market": 0.5064181808653853,
+      "Big tech": 0.5758681046540275,
+      "AI chips": -1.0270438258659689,
+      "Consumer spending": -0.0909262981075723,
+      "Interest rates": -0.19355039170752994
+     },
+     "explained": 0.38871266326741016,
+     "top": "AI chips"
+    },
+    {
+     "ticker": "ORCL",
+     "weight": 0.08675132435125991,
+     "risk": 0.18477463236866956,
+     "vol": 0.5983195714266282,
+     "betas": {
+      "Market": 1.188821140992202,
+      "Big tech": 1.6684740216742466,
+      "AI chips": -0.43587464806177395,
+      "Consumer spending": -0.7204547055473229,
+      "Interest rates": 0.2410307217570782
+     },
+     "explained": 0.33662082815279315,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "AMZN",
+     "weight": 0.12821550703451243,
+     "risk": 0.16557930039068391,
+     "vol": 0.33932292605348147,
+     "betas": {
+      "Market": 0.8433686570172282,
+      "Big tech": 0.6958051693035977,
+      "AI chips": -0.7845319979286927,
+      "Consumer spending": 1.5373171757299124,
+      "Interest rates": -0.3281963229232279
+     },
+     "explained": 0.6375302374773042,
+     "top": "Consumer spending"
+    },
+    {
+     "ticker": "META",
+     "weight": 0.09931201980848202,
+     "risk": 0.13374954045175805,
+     "vol": 0.41569657960249545,
+     "betas": {
+      "Market": 0.9625560836318233,
+      "Big tech": 0.6658133965039783,
+      "AI chips": -0.676351042973293,
+      "Consumer spending": 0.6004914573189669,
+      "Interest rates": -0.20382753925566707
+     },
+     "explained": 0.26351227288002876,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "JPM",
+     "weight": 0.155881721147254,
+     "risk": 0.09924787499169384,
+     "vol": 0.229328753208107,
+     "betas": {
+      "Market": 1.0688944282526553,
+      "Big tech": -0.06359372587949608,
+      "AI chips": 0.027335363772472723,
+      "Consumer spending": -0.019088837440143582,
+      "Interest rates": -0.25516833722128013
+     },
+     "explained": 0.33528353935195787,
+     "top": "Market"
+    },
+    {
+     "ticker": "NVDA",
+     "weight": 0.08884701987411281,
+     "risk": 0.09922271848673328,
+     "vol": 0.3874962792678532,
+     "betas": {
+      "Market": 0.7864696847662555,
+      "Big tech": 1.4098539680115625,
+      "AI chips": 0.3862361051385825,
+      "Consumer spending": -0.03519096308503294,
+      "Interest rates": 0.20957536632134113
+     },
+     "explained": 0.5066290816759039,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "LLY",
+     "weight": 0.1351488856565694,
+     "risk": 0.08698697366634305,
+     "vol": 0.35176978602325326,
+     "betas": {
+      "Market": 0.7988352501474657,
+      "Big tech": -0.44179849379139313,
+      "AI chips": -0.17852858447326048,
+      "Consumer spending": 0.1360978390004159,
+      "Interest rates": 0.09380144073014694
+     },
+     "explained": 0.1358597286684941,
+     "top": "Market"
+    },
+    {
+     "ticker": "WMT",
+     "weight": 0.155881721147254,
+     "risk": 0.03849083783690733,
+     "vol": 0.26874712611719864,
+     "betas": {
+      "Market": 0.37370360483557163,
+      "Big tech": -0.4420266639884175,
+      "AI chips": -0.1509723530475244,
+      "Consumer spending": 0.1672974942037906,
+      "Interest rates": 0.16567995582927278
+     },
+     "explained": 0.13017160686684112,
+     "top": "Big tech"
+    }
+   ]
+  },
+  {
+   "label": "All 15 stocks, equal amounts",
+   "n": 15,
+   "vol": 0.16111645967764343,
+   "betas": {
+    "Market": 0.7988891663677548,
+    "Big tech": 0.49032119865105467,
+    "AI chips": -0.364500513198684,
+    "Consumer spending": 0.21356135125448988,
+    "Interest rates": -0.025315756708293252
+   },
+   "share": {
+    "Market": 0.3641911348374453,
+    "Big tech": 0.2889262513097707,
+    "AI chips": 0.14599596602166964,
+    "Consumer spending": 0.02164257501917458,
+    "Interest rates": 0.00018469140967292477
+   },
+   "explained": 0.8209406185977332,
+   "own": 0.17905938140226685,
+   "top_factor": "Market",
+   "eff_bets": 1.7123590444701193,
+   "avg_corr": 0.135328173173163,
+   "groups": [
+    {
+     "members": [
+      "MSFT",
+      "ORCL"
+     ],
+     "avg_corr": 0.30748505996469283
+    }
+   ],
+   "stocks": [
+    {
+     "ticker": "ORCL",
+     "weight": 0.06666666666666668,
+     "risk": 0.15012636456696254,
+     "vol": 0.5983195714266282,
+     "betas": {
+      "Market": 1.188821140992202,
+      "Big tech": 1.6684740216742466,
+      "AI chips": -0.43587464806177395,
+      "Consumer spending": -0.7204547055473229,
+      "Interest rates": 0.2410307217570782
+     },
+     "explained": 0.33662082815279315,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "TSLA",
+     "weight": 0.06666666666666668,
+     "risk": 0.11857943677290524,
+     "vol": 0.4584064384466123,
+     "betas": {
+      "Market": 1.4122141389955472,
+      "Big tech": 1.4366673854616225,
+      "AI chips": -0.38360457691934147,
+      "Consumer spending": 1.3615005800407227,
+      "Interest rates": -0.14187668707065162
+     },
+     "explained": 0.5786535611582938,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "AVGO",
+     "weight": 0.06666666666666668,
+     "risk": 0.11721786720859184,
+     "vol": 0.48728244213229144,
+     "betas": {
+      "Market": 1.108308157452849,
+      "Big tech": 1.8528737014413044,
+      "AI chips": 0.37879337083402603,
+      "Consumer spending": -0.21024472595497218,
+      "Interest rates": 0.1395645198684253
+     },
+     "explained": 0.550017426523793,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "META",
+     "weight": 0.06666666666666668,
+     "risk": 0.09419145270545998,
+     "vol": 0.41569657960249545,
+     "betas": {
+      "Market": 0.9625560836318233,
+      "Big tech": 0.6658133965039783,
+      "AI chips": -0.676351042973293,
+      "Consumer spending": 0.6004914573189669,
+      "Interest rates": -0.20382753925566707
+     },
+     "explained": 0.26351227288002876,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "AMZN",
+     "weight": 0.06666666666666668,
+     "risk": 0.08906119796892557,
+     "vol": 0.33932292605348147,
+     "betas": {
+      "Market": 0.8433686570172282,
+      "Big tech": 0.6958051693035977,
+      "AI chips": -0.7845319979286927,
+      "Consumer spending": 1.5373171757299124,
+      "Interest rates": -0.3281963229232279
+     },
+     "explained": 0.6375302374773042,
+     "top": "Consumer spending"
+    },
+    {
+     "ticker": "NVDA",
+     "weight": 0.06666666666666668,
+     "risk": 0.08524525540057422,
+     "vol": 0.3874962792678532,
+     "betas": {
+      "Market": 0.7864696847662555,
+      "Big tech": 1.4098539680115625,
+      "AI chips": 0.3862361051385825,
+      "Consumer spending": -0.03519096308503294,
+      "Interest rates": 0.20957536632134113
+     },
+     "explained": 0.5066290816759039,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "GOOGL",
+     "weight": 0.06666666666666668,
+     "risk": 0.08180366188671152,
+     "vol": 0.33553523128858176,
+     "betas": {
+      "Market": 0.8183712189871876,
+      "Big tech": 0.6890035592939563,
+      "AI chips": -0.7487061627038956,
+      "Consumer spending": 0.5342554937598051,
+      "Interest rates": -0.007506172524292697
+     },
+     "explained": 0.3944872030857464,
+     "top": "AI chips"
+    },
+    {
+     "ticker": "MSFT",
+     "weight": 0.06666666666666668,
+     "risk": 0.07808845569867134,
+     "vol": 0.33946101757570235,
+     "betas": {
+      "Market": 0.5064181808653853,
+      "Big tech": 0.5758681046540275,
+      "AI chips": -1.0270438258659689,
+      "Consumer spending": -0.0909262981075723,
+      "Interest rates": -0.19355039170752994
+     },
+     "explained": 0.38871266326741016,
+     "top": "AI chips"
+    },
+    {
+     "ticker": "NFLX",
+     "weight": 0.06666666666666668,
+     "risk": 0.044691418092696326,
+     "vol": 0.36265581509382566,
+     "betas": {
+      "Market": 0.4788937819042904,
+      "Big tech": -0.19390779045534068,
+      "AI chips": -0.9004482641204032,
+      "Consumer spending": -0.28430202198267196,
+      "Interest rates": 0.06486555931654826
+     },
+     "explained": 0.2192828162234706,
+     "top": "AI chips"
+    },
+    {
+     "ticker": "JPM",
+     "weight": 0.06666666666666668,
+     "risk": 0.038421745072130524,
+     "vol": 0.229328753208107,
+     "betas": {
+      "Market": 1.0688944282526553,
+      "Big tech": -0.06359372587949608,
+      "AI chips": 0.027335363772472723,
+      "Consumer spending": -0.019088837440143582,
+      "Interest rates": -0.25516833722128013
+     },
+     "explained": 0.33528353935195787,
+     "top": "Market"
+    },
+    {
+     "ticker": "AAPL",
+     "weight": 0.06666666666666668,
+     "risk": 0.0368371162937909,
+     "vol": 0.24885089406679203,
+     "betas": {
+      "Market": 0.6227843955755579,
+      "Big tech": 0.07286637905990455,
+      "AI chips": -0.3825753244110241,
+      "Consumer spending": -0.037300808321591335,
+      "Interest rates": 0.09117904235309986
+     },
+     "explained": 0.16480385922700952,
+     "top": "Market"
+    },
+    {
+     "ticker": "LLY",
+     "weight": 0.06666666666666668,
+     "risk": 0.02842886834495249,
+     "vol": 0.35176978602325326,
+     "betas": {
+      "Market": 0.7988352501474657,
+      "Big tech": -0.44179849379139313,
+      "AI chips": -0.17852858447326048,
+      "Consumer spending": 0.1360978390004159,
+      "Interest rates": 0.09380144073014694
+     },
+     "explained": 0.1358597286684941,
+     "top": "Market"
+    },
+    {
+     "ticker": "V",
+     "weight": 0.06666666666666668,
+     "risk": 0.025787397072017226,
+     "vol": 0.22949160635240215,
+     "betas": {
+      "Market": 0.6994740941072923,
+      "Big tech": -0.2985338731260211,
+      "AI chips": -0.39874695775219343,
+      "Consumer spending": 0.07467957396066838,
+      "Interest rates": -0.2134476403372811
+     },
+     "explained": 0.28542428373232037,
+     "top": "Market"
+    },
+    {
+     "ticker": "BRK-B",
+     "weight": 0.06666666666666668,
+     "risk": 0.008891082250678339,
+     "vol": 0.1514067512893534,
+     "betas": {
+      "Market": 0.3142246779849981,
+      "Big tech": -0.2725471583977108,
+      "AI chips": -0.1924887994679696,
+      "Consumer spending": 0.18928901524237265,
+      "Interest rates": -0.04185986576037982
+     },
+     "explained": 0.23173781628609175,
+     "top": "Big tech"
+    },
+    {
+     "ticker": "WMT",
+     "weight": 0.06666666666666668,
+     "risk": 0.002628680664932065,
+     "vol": 0.26874712611719864,
+     "betas": {
+      "Market": 0.37370360483557163,
+      "Big tech": -0.4420266639884175,
+      "AI chips": -0.1509723530475244,
+      "Consumer spending": 0.1672974942037906,
+      "Interest rates": 0.16567995582927278
+     },
+     "explained": 0.13017160686684112,
+     "top": "Big tech"
+    }
+   ]
+  }
+ ],
+ "generated": "2026-11-14"
+}

@@ -48,8 +48,10 @@ import types
 import numpy as np
 import pandas as pd
 
+import exposure
 import news
 import stock_strategies as ss
+import thesis
 import trading as tr
 from scan import DEFAULT_TICKERS
 from stock_strategies import TD
@@ -470,6 +472,9 @@ def build_dashboard(sdir, open_it=False):
     for key in ("portfolio", "backtest"):
         p = os.path.join(sdir, key + ".json")
         data[key] = json.load(open(p)) if os.path.exists(p) else None
+    for key, fname in (("thesis", "thesis_report"), ("exposure", "exposure")):
+        p = os.path.join(sdir, fname + ".json")
+        data[key] = json.load(open(p)) if os.path.exists(p) else None
     if not data["portfolio"] and not data["backtest"]:
         raise SystemExit(f"Nothing in {sdir}/ yet. Run: python system.py all")
     html = open(os.path.join(here, "dashboard_template.html")).read()
@@ -535,6 +540,17 @@ def main():
                   f"shifted-signal runs (~50% = no timing skill).")
     if a.command in ("run", "all"):
         cycle(bundles, cfg, a, sdir)
+    if a.command in ("run", "all") and not a.demo:
+        # risk checks: alerts only, they never place or block an order
+        for label, job in (
+                ("thesis monitor", lambda: thesis.print_report(
+                    thesis.check(a.tickers, sdir))),
+                ("hidden-bet analysis", lambda: exposure.print_report(
+                    exposure.run(a.tickers, sdir)))):
+            try:
+                job()
+            except (SystemExit, Exception) as e:
+                ss._warn(f"{label} skipped: {e}")
     if a.command in ("dashboard", "all"):
         build_dashboard(sdir, a.open)
 

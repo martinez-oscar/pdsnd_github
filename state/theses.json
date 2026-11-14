@@ -1,0 +1,497 @@
+{
+ "NVDA": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "AI chip demand keeps revenue growing fast",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.5293,
+    "warn": 0.7939,
+    "baseline": 1.0585,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Pricing power holds: no margin squeeze from competition or custom chips",
+    "metric": "gross_margin",
+    "op": ">=",
+    "kill": 0.7067,
+    "warn": 0.7267,
+    "baseline": 0.7467,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Growth keeps converting into free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.2096,
+    "warn": 0.3144,
+    "baseline": 0.4192,
+    "baseline_date": "2026-07-31"
+   }
+  ]
+ },
+ "MSFT": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Cloud and AI keep company revenue growing at a double-digit pace",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.094,
+    "warn": 0.141,
+    "baseline": 0.188,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "AI spending does not erode operating margin",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.421,
+    "warn": 0.446,
+    "baseline": 0.471,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Data-center capex does not swallow free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.0865,
+    "warn": 0.1298,
+    "baseline": 0.1731,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "AAPL": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Revenue keeps growing (iPhone base plus services)",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0586,
+    "warn": 0.0879,
+    "baseline": 0.1172,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Services mix keeps gross margin high",
+    "metric": "gross_margin",
+    "op": ">=",
+    "kill": 0.4479,
+    "warn": 0.4679,
+    "baseline": 0.4879,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Buybacks keep shrinking the share count",
+    "metric": "shares_yoy",
+    "op": "<=",
+    "kill": 0.005,
+    "warn": -0.0057,
+    "baseline": -0.0163,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "GOOGL": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Search and cloud keep growing despite AI competitors",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.1233,
+    "warn": 0.1849,
+    "baseline": 0.2465,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "AI costs do not erode operating margin",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.2832,
+    "warn": 0.3082,
+    "baseline": 0.3332,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Capex does not swallow free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.021,
+    "warn": 0.0314,
+    "baseline": 0.0419,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "AMZN": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "AWS and retail keep revenue growing",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0604,
+    "warn": 0.0906,
+    "baseline": 0.1209,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Operating margin gains are kept",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.1047,
+    "warn": 0.1178,
+    "baseline": 0.1309,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Free cash flow stays positive through the capex build",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.0,
+    "warn": -0.0294,
+    "baseline": -0.0588,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "META": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Ad revenue keeps growing at a double-digit pace",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.1304,
+    "warn": 0.1955,
+    "baseline": 0.2607,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "AI and Reality Labs spending does not erode margin",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.2786,
+    "warn": 0.3036,
+    "baseline": 0.3286,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Capex does not swallow free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.0593,
+    "warn": 0.0889,
+    "baseline": 0.1186,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "AVGO": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "AI networking and custom chips keep revenue growing",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.4275,
+    "warn": 0.6413,
+    "baseline": 0.855,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Mix keeps gross margin high",
+    "metric": "gross_margin",
+    "op": ">=",
+    "kill": 0.6477,
+    "warn": 0.6677,
+    "baseline": 0.6877,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Acquisition debt keeps getting paid down",
+    "metric": "net_debt_ebitda",
+    "op": "<=",
+    "kill": 1.6771,
+    "warn": 1.1771,
+    "baseline": 0.6771,
+    "baseline_date": "2026-07-31"
+   }
+  ]
+ },
+ "TSLA": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Revenue returns to and stays in growth",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": -0.0517,
+    "warn": -0.0267,
+    "baseline": -0.0017,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Price cuts stop eroding gross margin",
+    "metric": "gross_margin",
+    "op": ">=",
+    "kill": 0.1639,
+    "warn": 0.1784,
+    "baseline": 0.1929,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "The business funds itself: free cash flow stays positive",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.0,
+    "warn": 0.0159,
+    "baseline": 0.0318,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "BRK-B": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Book value keeps compounding",
+    "metric": "equity_yoy",
+    "op": ">=",
+    "kill": 0.0598,
+    "warn": 0.0897,
+    "baseline": 0.1196,
+    "baseline_date": "2026-06-30"
+   },
+   {
+    "belief": "Operating businesses keep growing",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0961,
+    "warn": 0.1442,
+    "baseline": 0.1922,
+    "baseline_date": "2026-06-30"
+   },
+   {
+    "belief": "Underwriting and operating earnings stay healthy",
+    "metric": "net_margin",
+    "op": ">=",
+    "kill": 0.1405,
+    "warn": 0.158,
+    "baseline": 0.1756,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "LLY": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "GLP-1 drugs keep revenue growing fast",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.1931,
+    "warn": 0.2896,
+    "baseline": 0.3861,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Pricing pressure does not erode gross margin",
+    "metric": "gross_margin",
+    "op": ">=",
+    "kill": 0.7963,
+    "warn": 0.8163,
+    "baseline": 0.8363,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Growth keeps dropping through to operating profit",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.4625,
+    "warn": 0.4875,
+    "baseline": 0.5125,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "JPM": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Revenue holds up as interest rates move",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0306,
+    "warn": 0.0556,
+    "baseline": 0.0806,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Credit costs stay contained: net margin holds",
+    "metric": "net_margin",
+    "op": ">=",
+    "kill": 0.2821,
+    "warn": 0.3071,
+    "baseline": 0.3321,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Book value keeps growing",
+    "metric": "equity_yoy",
+    "op": ">=",
+    "kill": -0.0163,
+    "warn": 0.0087,
+    "baseline": 0.0337,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "WMT": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Sales keep growing steadily",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0094,
+    "warn": 0.0344,
+    "baseline": 0.0594,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Ads and e-commerce keep operating margin from slipping",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.0351,
+    "warn": 0.0395,
+    "baseline": 0.0439,
+    "baseline_date": "2026-07-31"
+   },
+   {
+    "belief": "Profit keeps turning into cash",
+    "metric": "cfo_ni",
+    "op": ">=",
+    "kill": 0.8,
+    "warn": 1.3722,
+    "baseline": 1.9443,
+    "baseline_date": "2026-07-31"
+   }
+  ]
+ },
+ "V": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Payment volume keeps revenue growing",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.066,
+    "warn": 0.099,
+    "baseline": 0.1319,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "The network keeps its very high operating margin",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.6008,
+    "warn": 0.6258,
+    "baseline": 0.6508,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Nearly all profit stays free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.2403,
+    "warn": 0.3604,
+    "baseline": 0.4805,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ },
+ "ORCL": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Cloud contracts turn into reported revenue growth",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.148,
+    "warn": 0.222,
+    "baseline": 0.2961,
+    "baseline_date": "2026-08-31"
+   },
+   {
+    "belief": "The cloud build does not erode operating margin",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.2924,
+    "warn": 0.3174,
+    "baseline": 0.3424,
+    "baseline_date": "2026-08-31"
+   },
+   {
+    "belief": "Debt taken on for data centers stays manageable",
+    "metric": "net_debt_ebitda",
+    "op": "<=",
+    "kill": 4.151,
+    "warn": 3.651,
+    "baseline": 3.151,
+    "baseline_date": "2026-08-31"
+   }
+  ]
+ },
+ "NFLX": {
+  "written": "2026-11-14",
+  "author": "draft",
+  "assumptions": [
+   {
+    "belief": "Subscribers, pricing and ads keep revenue growing",
+    "metric": "rev_yoy",
+    "op": ">=",
+    "kill": 0.0592,
+    "warn": 0.0889,
+    "baseline": 0.1185,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Operating margin keeps its gains",
+    "metric": "op_margin",
+    "op": ">=",
+    "kill": 0.263,
+    "warn": 0.288,
+    "baseline": 0.313,
+    "baseline_date": "2026-09-30"
+   },
+   {
+    "belief": "Content spending leaves solid free cash flow",
+    "metric": "fcf_margin",
+    "op": ">=",
+    "kill": 0.1144,
+    "warn": 0.1715,
+    "baseline": 0.2287,
+    "baseline_date": "2026-09-30"
+   }
+  ]
+ }
+}

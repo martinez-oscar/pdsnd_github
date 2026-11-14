@@ -117,6 +117,24 @@ td.head a { color: inherit; text-decoration: underline;
 .ev { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
   margin: 0 0 12px; font-size: 13px; color: var(--ink2); }
 .ev b { color: var(--ink); }
+.st { display: inline-flex; align-items: center; gap: 6px; font-weight: 600;
+  white-space: nowrap; }
+.st i { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+.st.BROKEN i { background: var(--crit); } .st.WATCH i { background: var(--warn); }
+.st.INTACT i { background: var(--good); }
+.hb { display: inline-block; width: 100px; height: 10px; border-radius: 5px;
+  background: var(--mid); vertical-align: middle; margin-right: 8px; overflow: hidden; }
+.hb i { display: block; height: 100%; background: var(--s1); }
+.drv { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 16px;
+  padding: 7px 0; border-top: 1px solid var(--grid); }
+.drv small { display: block; color: var(--ink2); font-size: 12px; }
+details.th { border-top: 1px solid var(--grid); padding: 8px 0; }
+details.th summary { cursor: pointer; display: flex; flex-wrap: wrap; gap: 4px 14px;
+  align-items: baseline; }
+details.th .tk { font-weight: 650; min-width: 54px; }
+details.th .why { color: var(--ink2); font-size: 13px; }
+details.th table { margin: 8px 0 4px; }
+details.th ul { margin: 6px 0 0; padding-left: 18px; color: var(--ink2); font-size: 13px; }
 ul.caveats { margin: 6px 0 0; padding-left: 18px; color: var(--ink2);
   font-size: 13px; }
 ul.caveats li { margin-bottom: 4px; }
@@ -335,6 +353,52 @@ if (P) {
   app.append($(`<div class="card"><h2>Closed trades</h2><p class="sub">${E.trades.length ? `${E.trades.length} closed, ${wins} winners (${pct(wins / E.trades.length, 0)}). Latest 25 shown.` : "None yet."}</p>
     ${tr.length ? `<div class="scroll"><table><tr><th>Stock</th><th>Bought</th><th>Sold</th><th>Days</th><th>Entry</th><th>Exit</th><th>Return</th><th>Profit</th><th class="l">Exit reason</th></tr>
     ${tr.map(t => `<tr><td>${esc(t.ticker)}</td><td>${t.entry_date}</td><td>${t.exit_date}</td><td>${t.days}</td><td>${usd(t.entry_px, 2)}</td><td>${usd(t.exit_px, 2)}</td><td class="${cls(t.ret)}">${spct(t.ret)}</td><td class="${cls(t.pnl)}">${susd(t.pnl)}</td><td class="l">${esc(t.why)}</td></tr>`).join("")}</table></div>` : ""}</div>`));
+}
+
+/* ---------------- Thesis monitor ---------------- */
+if (D.thesis) {
+  const T = D.thesis, S = T.stocks;
+  const fv = (v, k) => v == null ? "n/a" : k === "pct" ? spct(v) : v.toFixed(2) + "×";
+  const cnt = (k) => S.filter(s => s.status === k).length;
+  const heldBroken = S.filter(s => s.status === "BROKEN" && s.held).map(s => s.ticker);
+  const nflag = S.reduce((n, s) => n + s.flags.length, 0);
+  const drafts = S.filter(s => s.author === "draft").length;
+  const line = (s) => {
+    const bad = s.assumptions.filter(r => r.status === "BROKEN" || r.status === "WATCH");
+    if (bad.length) return bad.map(r => `${esc(r.label)} ${fv(r.value, r.kind)}, line ${r.op === ">=" ? "≥" : "≤"} ${fv(r.status === "BROKEN" ? r.kill : r.warn, r.kind)}`).join(" · ");
+    return s.flags.length ? `${s.flags.length} accounting flag${s.flags.length > 1 ? "s" : ""}` : "All three assumptions hold";
+  };
+  app.append($(`<div class="card"><h2>Thesis monitor: is the reason to own each stock still true?</h2>
+    <p class="sub">Checked ${esc(T.as_of)} against each company’s latest reported quarter. ${cnt("BROKEN")} broken, ${cnt("WATCH")} on watch, ${cnt("INTACT")} intact; ${nflag} accounting flags. Open a stock for the detail.</p>
+    ${heldBroken.length ? `<div class="ev"><b>Sell thesis broken: ${heldBroken.map(esc).join(", ")}.</b> The paper account holds ${heldBroken.length > 1 ? "these stocks" : "this stock"} and a written assumption no longer holds. This is an alert; the system does not sell on it.</div>` : ""}
+    ${drafts ? `<p class="sub">${drafts} of ${S.length} theses are still machine drafts. Edit <code>state/theses.json</code> so they state what you believe.</p>` : ""}
+    ${S.map(s => `<details class="th"${s.status === "BROKEN" ? " open" : ""}><summary><span class="tk">${esc(s.ticker)}</span><span class="st ${s.status.replace(" ", "")}"><i></i>${s.status === "BROKEN" ? "Broken" : s.status === "WATCH" ? "Watch" : s.status === "INTACT" ? "Intact" : "No data"}</span>${s.held ? `<span class="tag">held</span>` : ""}<span class="why">${line(s)}</span></summary>
+      <div class="scroll"><table><tr><th class="l">Assumption</th><th class="l">Measured by</th><th>Now</th><th>Quarter before</th><th>When written</th><th>Kill line</th><th class="l">Status</th></tr>
+      ${s.assumptions.map(r => `<tr><td class="l">${esc(r.belief)}</td><td class="l">${esc(r.label)}</td><td>${fv(r.value, r.kind)}</td><td>${fv(r.prev, r.kind)}</td><td>${fv(r.baseline, r.kind)}</td><td>${r.op === ">=" ? "≥" : "≤"} ${fv(r.kill, r.kind)}</td><td class="l"><span class="st ${r.status.replace(" ", "")}"><i></i>${esc(r.status.charAt(0) + r.status.slice(1).toLowerCase())}</span></td></tr>`).join("")}</table></div>
+      ${s.flags.length ? `<ul>${s.flags.map(f => `<li><b>Flag.</b> ${esc(f)}</li>`).join("")}</ul>` : ""}
+      ${s.news.length ? `<ul>${s.news.map(h => `<li>${esc(h.date)} · ${esc(h.etype)} · ${esc(h.title)}</li>`).join("")}</ul>` : ""}
+    </details>`).join("")}
+    <p class="sub" style="margin-top:10px">Numbers are Yahoo Finance quarterly statements: company totals only, no segment detail, footnotes or call transcripts. Kill lines were set mechanically when each thesis was written.</p></div>`));
+}
+
+/* ---------------- Hidden bets ---------------- */
+if (D.exposure) {
+  const X = D.exposure;
+  const what = Object.fromEntries(X.factors.map(f => [f.name, f.what]));
+  const view = (v) => {
+    const rows = Object.entries(v.share).sort((a, b) => b[1] - a[1]);
+    const grp = v.groups.length ? v.groups.map(g => `${g.members.map(esc).join(", ")} (correlation ${num(g.avg_corr)})`).join("; ") : "none";
+    return `<div class="card"><h2>${esc(v.label)}</h2>
+      <p class="sub">${v.n} stocks behave like <b>${num(v.eff_bets, 1)} independent bets</b>. Volatility ${pct(v.vol, 0)} a year.</p>
+      ${rows.concat([["Stock-specific", v.own]]).map(([n, sh]) => `<div class="drv"><div>${esc(n)}<small>${esc(what[n] || "each company’s own news")}</small></div><div><span class="hb"><i style="width:${Math.min(100, sh * 100)}%"></i></span>${pct(sh, 0)}${v.betas[n] < 0 ? " · moves against it" : ""}</div></div>`).join("")}
+      <p class="sub" style="margin-top:10px">Move together beyond these drivers: ${grp}.</p>
+      <div class="scroll"><table><tr><th>Stock</th><th>Weight</th><th>Share of risk</th><th class="l">Biggest driver</th></tr>
+      ${v.stocks.map(s => `<tr><td>${esc(s.ticker)}</td><td>${pct(s.weight, 0)}</td><td>${pct(s.risk, 0)}</td><td class="l">moves ${s.betas[s.top] > 0 ? "with" : "against"} ${esc(s.top)}</td></tr>`).join("")}</table></div></div>`;
+  };
+  app.append($(`<div class="card"><h2>Hidden bets: how diversified is this really?</h2>
+    <p class="sub">${X.days} trading days of returns, ${esc(X.start)} to ${esc(X.as_of)}. Each driver is measured after removing the ones above it in this order: ${X.factors.map(f => esc(f.name)).join(", ")}. A stock with a larger share of risk than weight is carrying more of the portfolio’s swings than its size suggests.</p></div>`));
+  const xr = $(`<div class="row two"></div>`); app.append(xr);
+  X.views.forEach(v => xr.append($(view(v))));
 }
 
 /* ---------------- Backtest ---------------- */
